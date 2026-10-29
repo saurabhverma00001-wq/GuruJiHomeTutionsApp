@@ -3,185 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GuruJi Home Tuitions</title>
+    <title>The Creative Minds | Home Tuition Marketplace</title>
     <style>
         :root {
             --primary: #4f46e5;
-            --primary-dark: #4338ca;
+            --primary-dark: #3730a3;
             --accent: #10b981;
             --bg: #f8fafc;
             --text: #1e293b;
             --gray: #64748b;
+            --card-bg: #ffffff;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding-bottom: 70px; }
-        
-        /* Header */
+        body { background-color: var(--bg); color: var(--text); padding-bottom: 80px; }
+
+        /* Top Header & Navigation */
         header {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 20px;
-            text-align: center;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        header h1 { font-size: 1.4rem; margin-bottom: 4px; }
-        header p { font-size: 0.8rem; opacity: 0.9; }
+        .logo-area { display: flex; align-items: center; gap: 10px; }
+        .logo-placeholder {
+            width: 38px; height: 38px; background: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: var(--primary); font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo-text h1 { font-size: 1rem; font-weight: 700; line-height: 1.2; }
+        .logo-text p { font-size: 0.65rem; opacity: 0.85; }
 
-        /* Container */
+        .menu-btn {
+            background: rgba(255,255,255,0.15); border: none; color: white;
+            width: 38px; height: 38px; border-radius: 8px; font-size: 1.2rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Slide-out Hamburger Menu Drawer */
+        .drawer {
+            position: fixed; top: 0; right: -280px; width: 280px; height: 100%;
+            background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            z-index: 2000; transition: right 0.3s ease; padding: 20px;
+        }
+        .drawer.open { right: 0; }
+        .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .drawer-item { padding: 12px 0; font-weight: 600; color: var(--text); border-bottom: 1px solid #f1f5f9; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+
+        /* Container & Screens */
         .container { padding: 16px; max-width: 600px; margin: auto; }
-
-        /* Screens */
         .screen { display: none; }
         .screen.active { display: block; }
 
-        /* Cards & Forms */
-        .card {
-            background: white;
-            padding: 16px;
-            border-radius: 14px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin-bottom: 14px;
+        /* Advanced Search Bar */
+        .search-box-card {
+            background: var(--card-bg); padding: 14px; border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 16px;
         }
+        .search-input-group { position: relative; margin-bottom: 10px; }
+        .search-input-group input, .search-input-group select {
+            width: 100%; padding: 10px 12px 10px 36px; border: 1px solid #cbd5e1;
+            border-radius: 8px; font-size: 0.9rem; outline: none; background: #fff;
+        }
+        .search-input-group span { position: absolute; left: 12px; top: 11px; font-size: 1rem; }
+
+        /* GIF / Promotional Banner */
+        .promo-banner {
+            width: 100%; height: 130px; background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 14px; color: white; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center; padding: 15px;
+            margin-bottom: 16px; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2);
+            position: relative; overflow: hidden;
+        }
+        .promo-banner h2 { font-size: 1.1rem; margin-bottom: 4px; }
+        .promo-banner p { font-size: 0.75rem; opacity: 0.9; }
+
+        /* Section Title */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin: 18px 0 10px 0; }
+        .section-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+
+        /* Subject / Course Cards Grid */
+        .grid-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
+        .course-card {
+            background: white; border-radius: 12px; padding: 14px; text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .course-card:active { transform: scale(0.97); }
+        .course-icon { font-size: 2rem; margin-bottom: 6px; }
+        .course-name { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; }
+        .course-desc { font-size: 0.7rem; color: var(--gray); }
+
+        /* Forms & Inputs */
+        .card { background: white; padding: 16px; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 14px; }
         .form-group { margin-bottom: 12px; }
-        label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray); margin-bottom: 4px; }
+        label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--gray); margin-bottom: 4px; }
         input, select, textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            outline: none;
+            width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1;
+            border-radius: 8px; font-size: 0.9rem; outline: none;
         }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary); }
         .btn-primary {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 6px;
+            background: var(--primary); color: white; border: none; width: 100%;
+            padding: 12px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer;
         }
 
-        /* Tutor Card */
-        .tutor-card {
-            background: white;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-            border-left: 4px solid var(--accent);
-        }
-        .tutor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .tutor-name { font-size: 1rem; font-weight: 700; }
-        .tutor-badge { background: #d1fae5; color: #065f46; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
-        .tutor-details { font-size: 0.85rem; color: var(--gray); margin-bottom: 10px; }
-        .tutor-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 8px; }
-        .tutor-fee { font-size: 0.95rem; font-weight: 700; color: var(--text); }
-        .btn-book {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
+        /* Fee Slab Info Box */
+        .fee-slab-box {
+            background: #eff6ff; border: 1px dashed #3b82f6; padding: 10px; border-radius: 8px;
+            font-size: 0.75rem; color: #1e40af; margin-bottom: 12px; line-height: 1.4;
         }
 
-        /* Bottom App Navigation Bar */
+        /* Bottom Navigation Bar */
         nav {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
-            z-index: 100;
+            position: fixed; bottom: 0; left: 0; width: 100%; background: white;
+            display: flex; justify-content: space-around; padding: 8px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.08); border-top-left-radius: 16px;
+            border-top-right-radius: 16px; z-index: 1000;
         }
-        .nav-item {
-            text-align: center;
-            font-size: 0.75rem;
-            color: var(--gray);
-            cursor: pointer;
-            font-weight: 600;
-        }
+        .nav-item { text-align: center; font-size: 0.7rem; color: var(--gray); cursor: pointer; font-weight: 600; }
         .nav-item.active { color: var(--primary); }
-        .nav-item span { display: block; font-size: 1.2rem; margin-bottom: 2px; }
+        .nav-item span { display: block; font-size: 1.1rem; margin-bottom: 2px; }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            z-index: 1000;
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed; bottom: 75px; right: 16px; background: #25d366; color: white;
+            width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4);
+            z-index: 900; text-decoration: none;
         }
-        .modal-content { background: white; padding: 20px; border-radius: 14px; width: 100%; max-width: 400px; }
-        .modal-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; color: var(--primary); }
-        .modal-text { font-size: 0.82rem; color: var(--gray); margin-bottom: 15px; line-height: 1.4; }
-        .modal-buttons { display: flex; gap: 10px; }
-        .btn-cancel { background: #e2e8f0; color: var(--text); border: none; padding: 10px; border-radius: 8px; flex: 1; font-weight: 600; cursor: pointer; }
-        .btn-pay { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; flex: 1; font-weight: 600; cursor: pointer; }
+
+        /* Modal Overlay */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); justify-content: center; align-items: center;
+            padding: 20px; z-index: 3000;
+        }
+        .modal-content { background: white; padding: 20px; border-radius: 14px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+        .qr-placeholder { width: 150px; height: 150px; background: #e2e8f0; margin: 10px auto; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--gray); border-radius: 8px; }
     </style>
 </head>
 <body>
 
+    <!-- Top Header -->
     <header>
-        <h1 id="header-title">GuruJi Home Tuitions</h1>
-        <p id="header-subtitle">Verified Home Tutors • Zero Agency Commission</p>
+        <div class="logo-area">
+            <div class="logo-placeholder">CM</div>
+            <div class="logo-text">
+                <h1>Creative Minds</h1>
+                <p>Think Smart, Learn Fast</p>
+            </div>
+        </div>
+        <button class="menu-btn" onclick="toggleDrawer()">☰</button>
     </header>
 
+    <!-- Slide-out Menu Drawer -->
+    <div class="drawer" id="navDrawer">
+        <div class="drawer-header">
+            <h3 style="font-size: 1rem; color: var(--primary);">Quick Menu</h3>
+            <button onclick="toggleDrawer()" style="border:none; background:none; font-size:1.2rem; cursor:pointer;">✕</button>
+        </div>
+        <div class="drawer-item" onclick="switchTab('search'); toggleDrawer();">🏠 Home / Search</div>
+        <div class="drawer-item" onclick="switchTab('teacher'); toggleDrawer();">👨‍🏫 Teacher Portal & Register</div>
+        <div class="drawer-item" onclick="switchTab('admin'); toggleDrawer();">📊 Admin & Firewall DB</div>
+        <div class="drawer-item" onclick="window.open('https://wa.me/918756866588', '_blank')">💬 Chat on WhatsApp</div>
+    </div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/918756866588?text=Hello%20Creative%20Minds,%20I%20want%20inquiry%20regarding%20Home%20Tuition." class="whatsapp-float" target="_blank">💬</a>
+
     <div class="container">
-        
-        <!-- SCREEN 1: PARENT SEARCH -->
+
+        <!-- SCREEN 1: HOME & PARENT SEARCH -->
         <div id="screen-search" class="screen active">
-            <div class="card">
-                <div class="form-group">
-                    <label>Select Locality / Area</label>
-                    <select id="locality">
-                        <option value="rajajipuram">Rajajipuram, Lucknow</option>
-                        <option value="para">Para Colony, Lucknow</option>
-                        <option value="alambagh">Alambagh, Lucknow</option>
+            
+            <!-- Advanced Search Bar -->
+            <div class="search-box-card">
+                <div class="search-input-group">
+                    <span>📍</span>
+                    <input type="text" id="searchLocality" placeholder="Enter Locality (e.g. Rajajipuram, Para)...">
+                </div>
+                <div class="search-input-group">
+                    <span>📚</span>
+                    <select id="searchClassSubject">
+                        <option value="">Select Class & Subject</option>
+                        <option value="1-5">Class 1st to 5th (All Subjects)</option>
+                        <option value="6-8">Class 6th to 8th (Math/Science)</option>
+                        <option value="9-10">Class 9th to 10th (PCM / Biology)</option>
+                        <option value="11-12">Class 11th to 12th (Physics/Maths/CS)</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Select Class & Subject</label>
-                    <select id="subject">
-                        <option value="maths-10">Class 10 - Mathematics / Science</option>
-                        <option value="physics-12">Class 12 - Physics / Chemistry</option>
-                        <option value="junior">Class 1 to 8 - All Subjects</option>
-                    </select>
-                </div>
-                <button class="btn-primary" onclick="searchTutors()">Find Nearby Tutors</button>
+                <button class="btn-primary" onclick="performSearch()">Search Verified Tutors</button>
             </div>
 
-            <div style="font-size: 1rem; font-weight: 700; margin: 16px 0 10px 0;">Available Verified Tutors</div>
-            <div id="tutorList">
-                <div class="tutor-card">
-                    <div class="tutor-header">
-                        <span class="tutor-name">Saurabh Verma</span>
-                        <span class="tutor-badge">Verified 9+ Yrs Exp</span>
-                    </div>
-                    <div class="tutor-details">
-                        📍 Rajajipuram (Within 2 km)<br>
-                        📚 Math, Science, Computer (Class 1-12)
-                    </div>
-                    <div class="tutor-footer">
-                        <span class="tutor-fee">₹4,500 / month</span>
-                        <button class="btn-book" onclick="openModal('Saurabh Verma')">Book 2-Day Demo</button>
-                    </div>
+            <!-- GIF / Promotional Banner -->
+            <div class="promo-banner">
+                <h2>⚡ Zero Agency Commission!</h2>
+                <p>Direct Verified Tutors at Your Doorstep • Book 2-Day Trial for ₹49 Only</p>
+            </div>
+
+            <!-- Student / Parent Registration Form (Find Nearby Teacher) -->
+            <div class="card">
+                <h3 style="font-size: 0.95rem; margin-bottom: 10px; color: var(--primary);">📝 Request Home Tutor (Instant Match)</h3>
+                <div class="fee-slab-box">
+                    <b>Standard Fee Slabs:</b><br>
+                    • Class 1-5: ₹2,500 - ₹4,000 /mo<br>
+                    • Class 6-8: ₹4,500 - ₹5,500 /mo<br>
+                    • Class 9-10: ₹5,500 - ₹7,500 /mo<br>
+                    • Class 11-12: ₹8,000 - ₹10,000 /mo
+                </div>
+                <div class="form-group">
+                    <label>Student Name & Class</label>
+                    <input type="text" id="reqNameClass" placeholder="e.g. Aman Verma, Class 10th">
+                </div>
+                <div class="form-group">
+                    <label>Your Address / Locality</label>
+                    <input type="text" id="reqAddress" placeholder="e.g. Sector 11, Rajajipuram">
+                </div>
+                <button class="btn-primary" onclick="submitStudentRequest()">Submit Request to Firewall DB</button>
+            </div>
+
+            <!-- Subject Cards Grid (Individual Dynamic Pages) -->
+            <div class="section-header">
+                <div class="section-title">Explore Subjects & Expert Panels</div>
+            </div>
+            <div class="grid-cards">
+                <div class="course-card" onclick="openSubjectPage('Maths')">
+                    <div class="course-icon">📐</div>
+                    <div class="course-name">Mathematics</div>
+                    <div class="course-desc">Class 1 to 12 Expert Tutors</div>
+                </div>
+                <div class="course-card" onclick="openSubjectPage('Science')">
+                    <div class="course-icon">🔬</div>
+                    <div class="course-name">Science & Physics</div>
+                    <div class="course-desc">CBSE / ICSE / UP Board</div>
+                </div>
+                <div class="course-card" onclick="openSubjectPage('Computer')">
+                    <div class="course-icon">💻</div>
+                    <div class="course-name">Computer & Coding</div>
+                    <div class="course-desc">Python, Java, HTML, CS</div>
+                </div>
+                <div class="course-card" onclick="openSubjectPage('English')">
+                    <div class="course-icon">📖</div>
+                    <div class="course-name">English & Humanities</div>
+                    <div class="course-desc">Spoken & Grammar Masters</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUBJECT SPECIFIC DETAIL SCREEN -->
+        <div id="screen-subject-detail" class="screen">
+            <div class="card">
+                <button onclick="switchTab('search')" style="border:none; background:none; color:var(--primary); font-weight:bold; cursor:pointer; margin-bottom:10px;">← Back to Home</button>
+                <h2 id="detSubjectTitle" style="font-size: 1.2rem; color: var(--primary); margin-bottom: 6px;">Subject Details</h2>
+                <p id="detSubjectDesc" style="font-size: 0.8rem; color: var(--gray); margin-bottom: 14px;">Comprehensive coaching details and video introduction placeholder.</p>
+                
+                <!-- Video / Photo Placeholder -->
+                <div style="width:100%; height:160px; background:#e2e8f0; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--gray); font-size:0.8rem; margin-bottom:14px;">
+                    🎥 YouTube Video / Photo Intro Placeholder
+                </div>
+
+                <h3 style="font-size: 0.9rem; margin-bottom: 8px;">Available Expert Tutors in this Subject:</h3>
+                <div id="expertTutorList">
+                    <!-- Dynamically populated expert tutors -->
                 </div>
             </div>
         </div>
@@ -189,117 +278,195 @@
         <!-- SCREEN 2: TEACHER REGISTRATION -->
         <div id="screen-teacher" class="screen">
             <div class="card">
-                <h3 style="font-size: 1.1rem; margin-bottom: 12px; color: var(--primary);">Join as Home Tutor</h3>
+                <h3 style="font-size: 1.05rem; margin-bottom: 10px; color: var(--primary);">👨‍🏫 Tutor Registration Portal</h3>
+                <p style="font-size: 0.75rem; color: var(--gray); margin-bottom: 14px;">Register your profile to get direct student leads in your locality.</p>
                 <div class="form-group">
                     <label>Full Name</label>
-                    <input type="text" id="tName" placeholder="Enter your full name">
+                    <input type="text" id="tName" placeholder="e.g. Saurabh Verma">
                 </div>
                 <div class="form-group">
                     <label>Subjects & Classes You Teach</label>
-                    <input type="text" id="tSubjects" placeholder="e.g. Math & Science (Class 6-10)">
+                    <input type="text" id="tSubjects" placeholder="e.g. Maths & Science (Class 6-12)">
                 </div>
                 <div class="form-group">
                     <label>Your Locality / Area</label>
-                    <input type="text" id="tLocality" placeholder="e.g. Rajajipuram, Lucknow">
+                    <input type="text" id="tLocality" placeholder="e.g. Para Colony, Lucknow">
                 </div>
                 <div class="form-group">
-                    <label>Expected Monthly Fee (₹)</label>
-                    <input type="number" id="tFee" placeholder="e.g. 4000">
+                    <label>Expected Fee Range / Expectation</label>
+                    <input type="text" id="tFee" placeholder="e.g. 4000 - 6000">
                 </div>
-                <button class="btn-primary" onclick="registerTeacher()">Submit Profile for Verification</button>
+                <button class="btn-primary" onclick="registerTeacherToDB()">Register & Save to Firewall DB</button>
+            </div>
+
+            <!-- Teacher Utility Cards -->
+            <div class="section-header"><div class="section-title">Teacher Benefits & Tools</div></div>
+            <div class="card" style="background: #f0fdf4; border-left: 4px solid var(--accent);">
+                <h4 style="font-size: 0.85rem; color: #065f46; margin-bottom: 4px;">🔒 Secure Escrow & Payouts</h4>
+                <p style="font-size: 0.75rem; color: var(--gray);">Your earnings are fully secure. Payouts are directly settled twice a month on the **15th and 30th**.</p>
             </div>
         </div>
 
-        <!-- SCREEN 3: ADMIN / ESCROW DASHBOARD -->
+        <!-- SCREEN 3: ADMIN & FIREWALL DB -->
         <div id="screen-admin" class="screen">
             <div class="card">
-                <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: var(--primary);">Admin Escrow & Commission Control</h3>
-                <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 14px;">Yahan aap saari demo bookings, tutor approvals aur monthly fee escrow track karenge.</p>
-                <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 10px;">
-                    <b>Total Active Tuitions:</b> 1<br>
-                    <b>Escrow Balance Held:</b> ₹0<br>
-                    <b>Platform Commission (9%):</b> ₹0
+                <h3 style="font-size: 1.05rem; margin-bottom: 10px; color: var(--primary);">📊 Admin Control & Firewall Database</h3>
+                <p style="font-size: 0.75rem; color: var(--gray); margin-bottom: 14px;">All student requests and registered teachers are automatically synchronized here.</p>
+                
+                <div style="background: #f8fafc; padding: 12px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 12px; border: 1px solid #e2e8f0;">
+                    <b>Database Status:</b> Connected to Firewall Storage<br>
+                    <span id="dbStats">Total Registered Teachers: 1 | Student Leads: 0</span>
                 </div>
-                <button class="btn-primary" onclick="alert('Admin Panel Connected Successfully!')">Refresh Live Data</button>
+
+                <h4 style="font-size: 0.85rem; margin-bottom: 6px;">Live Data Records:</h4>
+                <div id="adminDataLogs" style="font-size: 0.75rem; background: #fff; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px; max-height: 200px; overflow-y: auto;">
+                    [System Log]: Saurabh Verma (Rajajipuram) - Math/Science Expert loaded.
+                </div>
             </div>
         </div>
 
     </div>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Bottom App Navigation Bar -->
     <nav>
-        <div class="nav-item active" onclick="switchTab('search', this)">
+        <div class="nav-item active" onclick="switchTab('search')" id="nav-search">
             <span>🔍</span>Search
         </div>
-        <div class="nav-item" onclick="switchTab('teacher', this)">
+        <div class="nav-item" onclick="switchTab('teacher')" id="nav-teacher">
             <span>👨‍🏫</span>Join Tutor
         </div>
-        <div class="nav-item" onclick="switchTab('admin', this)">
-            <span>📊</span>Admin
+        <div class="nav-item" onclick="switchTab('admin')" id="nav-admin">
+            <span>📊</span>Admin DB
         </div>
     </nav>
 
-    <!-- Modal for ₹49 Demo -->
+    <!-- Modal for ₹49 Demo QR Payment -->
     <div class="modal" id="demoModal">
         <div class="modal-content">
-            <div class="modal-title">Book 2-Day Paid Demo (₹49)</div>
-            <div class="modal-text">
-                🔒 <b>Secure Token Fee:</b> Yeh ₹49 aapki pehle mahine ki tuition fee mein adjust ho jayega. Agar teacher pasand nahi aaya, toh yeh ₹49 teacher ko time/petrol compensation ke roop mein mil jayega.
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h3 style="font-size: 1rem; color: var(--primary);">Book 2-Day Demo (₹49)</h3>
+                <button onclick="closeModal()" style="border:none; background:none; font-size:1.1rem; cursor:pointer;">✕</button>
             </div>
-            <div class="form-group">
-                <label>Parent Name</label>
-                <input type="text" id="parentName" placeholder="Enter your name">
+            <p style="font-size: 0.75rem; color: var(--gray); margin-bottom: 10px; line-height: 1.4;">
+                Scan QR or pay via UPI. This ₹49 token fee adjusts in first month's fee, or compensates the teacher if demo is rejected.
+            </p>
+            <div class="qr-placeholder">
+                [ UPI QR CODE ]
             </div>
-            <div class="form-group">
-                <label>Phone Number</label>
-                <input type="tel" id="parentPhone" placeholder="Enter 10-digit mobile number">
+            <div style="text-align: center; font-size: 0.8rem; font-weight: bold; margin-bottom: 12px; color: var(--text);">
+                UPI ID: creativeminds@upi
             </div>
-            <div class="modal-buttons">
-                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-                <button class="btn-pay" onclick="payToken()">Pay ₹49 & Book</button>
-            </div>
+            <button class="btn-primary" onclick="confirmPaymentDone()">I Have Paid ₹49 - Confirm</button>
         </div>
     </div>
 
     <script>
-        function switchTab(tabName, element) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
-            if(tabName === 'search') {
-                document.getElementById('screen-search').classList.add('active');
-                document.getElementById('header-title').innerText = "GuruJi Home Tuitions";
-                document.getElementById('header-subtitle').innerText = "Verified Home Tutors • Zero Agency Commission";
-            } else if(tabName === 'teacher') {
-                document.getElementById('screen-teacher').classList.add('active');
-                document.getElementById('header-title').innerText = "Tutor Registration";
-                document.getElementById('header-subtitle').innerText = "Join Our Network & Get Direct Leads";
-            } else if(tabName === 'admin') {
-                document.getElementById('screen-admin').classList.add('active');
-                document.getElementById('header-title').innerText = "Admin Control Room";
-                document.getElementById('header-subtitle').innerText = "Escrow & Payout Management";
-            }
-            element.classList.add('active');
+        // Database State Simulator (Firewall Storage)
+        let dbTeachers = [
+            { name: "Saurabh Verma", subjects: "Math, Science, Computer (1-12)", locality: "Rajajipuram, Lucknow", fee: "4,500 /mo" }
+        ];
+        let dbStudents = [];
+
+        function toggleDrawer() {
+            document.getElementById('navDrawer').classList.toggle('open');
         }
 
-        let selectedTutorName = "";
-        function searchTutors() { alert("Searching verified tutors in your selected area..."); }
-        function openModal(tName) { selectedTutorName = tName; document.getElementById('demoModal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('demoModal').style.display = 'none'; }
-        
-        function payToken() {
-            let name = document.getElementById('parentName').value;
-            let phone = document.getElementById('parentPhone').value;
-            if(!name || !phone) { alert("Please enter name and phone number."); return; }
-            alert(`Demo request submitted for ${selectedTutorName}!\nRedirecting to secure gateway for ₹49...`);
+        function switchTab(tabName) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+            if(tabName === 'search') {
+                document.getElementById('screen-search').classList.add('active');
+                document.getElementById('nav-search').classList.add('active');
+            } else if(tabName === 'teacher') {
+                document.getElementById('screen-teacher').classList.add('active');
+                document.getElementById('nav-teacher').classList.add('active');
+            } else if(tabName === 'admin') {
+                document.getElementById('screen-admin').classList.add('active');
+                document.getElementById('nav-admin').classList.add('active');
+                updateAdminLogs();
+            }
+            window.scrollTo(0,0);
+        }
+
+        // Individual Subject Page Renderer
+        function openSubjectPage(subjectName) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-subject-detail').classList.add('active');
+            
+            document.getElementById('detSubjectTitle').innerText = subjectName + " Expert Panel";
+            document.getElementById('detSubjectDesc').innerText = `Specialized home tutors available for ${subjectName}. Verified background check and structured syllabus coverage.`;
+
+            let expertHtml = "";
+            dbTeachers.forEach(t => {
+                expertHtml += `
+                    <div style="background:#f8fafc; padding:10px; border-radius:8px; border-left:3px solid #10b981; margin-bottom:8px;">
+                        <div style="font-weight:bold; font-size:0.85rem;">${t.name}</div>
+                        <div style="font-size:0.75rem; color:var(--gray);">📍 ${t.locality} | 📚 ${t.subjects}</div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+                            <span style="font-weight:bold; font-size:0.8rem;">₹${t.fee}</span>
+                            <button onclick="openDemoModal()" style="background:#10b981; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;">Book ₹49 Demo</button>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('expertTutorList').innerText = "";
+            document.getElementById('expertTutorList').innerHTML = expertHtml;
+            window.scrollTo(0,0);
+        }
+
+        function performSearch() {
+            let loc = document.getElementById('searchLocality').value;
+            if(!loc) { alert("Please enter a locality to search."); return; }
+            alert(`Searching verified teachers near ${loc}... Matching profiles found!`);
+        }
+
+        function submitStudentRequest() {
+            let nameClass = document.getElementById('reqNameClass').value;
+            let address = document.getElementById('reqAddress').value;
+            if(!nameClass || !address) { alert("Please fill all details."); return; }
+            
+            dbStudents.push({ name: nameClass, address: address, time: new Date().toLocaleTimeString() });
+            alert("Student request successfully saved to Firewall DB! Opening demo payment gateway.");
+            openDemoModal();
+        }
+
+        function registerTeacherToDB() {
+            let name = document.getElementById('tName').value;
+            let subjects = document.getElementById('tSubjects').value;
+            let locality = document.getElementById('tLocality').value;
+            let fee = document.getElementById('tFee').value;
+
+            if(!name || !locality) { alert("Please fill mandatory details."); return; }
+
+            dbTeachers.push({ name: name, subjects: subjects || "General", locality: locality, fee: fee || "4000" });
+            alert("Teacher registered and automatically saved to Firewall DB successfully!");
+            switchTab('search');
+        }
+
+        function openDemoModal() {
+            document.getElementById('demoModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('demoModal').style.display = 'none';
+        }
+
+        function confirmPaymentDone() {
+            alert("Payment recorded successfully! Admin & Teacher notified via Escrow system.");
             closeModal();
         }
 
-        function registerTeacher() {
-            let name = document.getElementById('tName').value;
-            if(!name) { alert("Please fill your name."); return; }
-            alert("Teacher profile submitted successfully! Admin will verify and list it soon.");
-            switchTab('search', document.querySelectorAll('.nav-item')[0]);
+        function updateAdminLogs() {
+            document.getElementById('dbStats').innerText = `Total Registered Teachers: ${dbTeachers.length} | Student Leads: ${dbStudents.length}`;
+            let logHtml = "";
+            dbTeachers.forEach(t => {
+                logHtml += `<div>[Teacher]: ${t.name} - ${t.locality} (${t.subjects})</div>`;
+            });
+            dbStudents.forEach(s => {
+                logHtml += `<div style="color:#0284c7;">[Student Lead]: ${s.name} at ${s.address}</div>`;
+            });
+            document.getElementById('adminDataLogs').innerHTML = logHtml;
         }
     </script>
 </body>
