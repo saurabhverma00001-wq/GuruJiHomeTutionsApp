@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GuruJi Home Tuitions | Verified Tutors Near You</title>
+    <title>GuruJi Home Tuitions</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -14,7 +14,7 @@
             --gray: #64748b;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding-bottom: 40px; }
+        body { background-color: var(--bg); color: var(--text); padding-bottom: 70px; }
         
         /* Header */
         header {
@@ -26,24 +26,27 @@
             border-bottom-right-radius: 20px;
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
         }
-        header h1 { font-size: 1.5rem; margin-bottom: 5px; }
-        header p { font-size: 0.85rem; opacity: 0.9; }
+        header h1 { font-size: 1.4rem; margin-bottom: 4px; }
+        header p { font-size: 0.8rem; opacity: 0.9; }
 
         /* Container */
         .container { padding: 16px; max-width: 600px; margin: auto; }
 
-        /* Search Card */
-        .search-card {
+        /* Screens */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* Cards & Forms */
+        .card {
             background: white;
             padding: 16px;
             border-radius: 14px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin-top: -15px;
-            position: relative;
+            margin-bottom: 14px;
         }
         .form-group { margin-bottom: 12px; }
         label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--gray); margin-bottom: 4px; }
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 10px 12px;
             border: 1px solid #cbd5e1;
@@ -51,7 +54,7 @@
             font-size: 0.95rem;
             outline: none;
         }
-        input:focus, select:focus { border-color: var(--primary); }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); }
         .btn-primary {
             background: var(--primary);
             color: white;
@@ -64,10 +67,8 @@
             cursor: pointer;
             margin-top: 6px;
         }
-        .btn-primary:active { background: var(--primary-dark); }
 
-        /* Results Section */
-        .section-title { font-size: 1.1rem; font-weight: 700; margin: 20px 0 10px 0; }
+        /* Tutor Card */
         .tutor-card {
             background: white;
             border-radius: 12px;
@@ -93,7 +94,30 @@
             cursor: pointer;
         }
 
-        /* Modal Popup for ₹49 Booking */
+        /* Bottom App Navigation Bar */
+        nav {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            z-index: 100;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--gray);
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .nav-item.active { color: var(--primary); }
+        .nav-item span { display: block; font-size: 1.2rem; margin-bottom: 2px; }
+
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -104,15 +128,9 @@
             padding: 20px;
             z-index: 1000;
         }
-        .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 14px;
-            width: 100%;
-            max-width: 400px;
-        }
+        .modal-content { background: white; padding: 20px; border-radius: 14px; width: 100%; max-width: 400px; }
         .modal-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; color: var(--primary); }
-        .modal-text { font-size: 0.85rem; color: var(--gray); margin-bottom: 15px; line-height: 1.4; }
+        .modal-text { font-size: 0.82rem; color: var(--gray); margin-bottom: 15px; line-height: 1.4; }
         .modal-buttons { display: flex; gap: 10px; }
         .btn-cancel { background: #e2e8f0; color: var(--text); border: none; padding: 10px; border-radius: 8px; flex: 1; font-weight: 600; cursor: pointer; }
         .btn-pay { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; flex: 1; font-weight: 600; cursor: pointer; }
@@ -121,59 +139,112 @@
 <body>
 
     <header>
-        <h1>GuruJi Home Tuitions</h1>
-        <p>Verified Home Tutors • Zero Agency Commission</p>
+        <h1 id="header-title">GuruJi Home Tuitions</h1>
+        <p id="header-subtitle">Verified Home Tutors • Zero Agency Commission</p>
     </header>
 
     <div class="container">
-        <!-- Search Box -->
-        <div class="search-card">
-            <div class="form-group">
-                <label>Select Locality / Area</label>
-                <select id="locality">
-                    <option value="rajajipuram">Rajajipuram, Lucknow</option>
-                    <option value="para">Para Colony, Lucknow</option>
-                    <option value="alambagh">Alambagh, Lucknow</option>
-                </select>
+        
+        <!-- SCREEN 1: PARENT SEARCH -->
+        <div id="screen-search" class="screen active">
+            <div class="card">
+                <div class="form-group">
+                    <label>Select Locality / Area</label>
+                    <select id="locality">
+                        <option value="rajajipuram">Rajajipuram, Lucknow</option>
+                        <option value="para">Para Colony, Lucknow</option>
+                        <option value="alambagh">Alambagh, Lucknow</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Select Class & Subject</label>
+                    <select id="subject">
+                        <option value="maths-10">Class 10 - Mathematics / Science</option>
+                        <option value="physics-12">Class 12 - Physics / Chemistry</option>
+                        <option value="junior">Class 1 to 8 - All Subjects</option>
+                    </select>
+                </div>
+                <button class="btn-primary" onclick="searchTutors()">Find Nearby Tutors</button>
             </div>
-            <div class="form-group">
-                <label>Select Class & Subject</label>
-                <select id="subject">
-                    <option value="maths-10">Class 10 - Mathematics / Science</option>
-                    <option value="physics-12">Class 12 - Physics / Chemistry</option>
-                    <option value="junior">Class 1 to 8 - All Subjects</option>
-                </select>
+
+            <div style="font-size: 1rem; font-weight: 700; margin: 16px 0 10px 0;">Available Verified Tutors</div>
+            <div id="tutorList">
+                <div class="tutor-card">
+                    <div class="tutor-header">
+                        <span class="tutor-name">Saurabh Verma</span>
+                        <span class="tutor-badge">Verified 9+ Yrs Exp</span>
+                    </div>
+                    <div class="tutor-details">
+                        📍 Rajajipuram (Within 2 km)<br>
+                        📚 Math, Science, Computer (Class 1-12)
+                    </div>
+                    <div class="tutor-footer">
+                        <span class="tutor-fee">₹4,500 / month</span>
+                        <button class="btn-book" onclick="openModal('Saurabh Verma')">Book 2-Day Demo</button>
+                    </div>
+                </div>
             </div>
-            <button class="btn-primary" onclick="searchTutors()">Find Nearby Tutors</button>
         </div>
 
-        <!-- Tutor List -->
-        <div class="section-title">Available Verified Tutors</div>
-        <div id="tutorList">
-            <!-- Sample Tutor Card -->
-            <div class="tutor-card">
-                <div class="tutor-header">
-                    <span class="tutor-name">Saurabh Verma</span>
-                    <span class="tutor-badge">Verified 9+ Years Exp</span>
+        <!-- SCREEN 2: TEACHER REGISTRATION -->
+        <div id="screen-teacher" class="screen">
+            <div class="card">
+                <h3 style="font-size: 1.1rem; margin-bottom: 12px; color: var(--primary);">Join as Home Tutor</h3>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="tName" placeholder="Enter your full name">
                 </div>
-                <div class="tutor-details">
-                    📍 Rajajipuram (Within 2 km)<br>
-                    📚 Teaches: Math, Science, Computer (Class 1-12)
+                <div class="form-group">
+                    <label>Subjects & Classes You Teach</label>
+                    <input type="text" id="tSubjects" placeholder="e.g. Math & Science (Class 6-10)">
                 </div>
-                <div class="tutor-footer">
-                    <span class="tutor-fee">₹4,500 / month</span>
-                    <button class="btn-book" onclick="openModal('Saurabh Verma')">Book 2-Day Demo</button>
+                <div class="form-group">
+                    <label>Your Locality / Area</label>
+                    <input type="text" id="tLocality" placeholder="e.g. Rajajipuram, Lucknow">
                 </div>
+                <div class="form-group">
+                    <label>Expected Monthly Fee (₹)</label>
+                    <input type="number" id="tFee" placeholder="e.g. 4000">
+                </div>
+                <button class="btn-primary" onclick="registerTeacher()">Submit Profile for Verification</button>
             </div>
         </div>
+
+        <!-- SCREEN 3: ADMIN / ESCROW DASHBOARD -->
+        <div id="screen-admin" class="screen">
+            <div class="card">
+                <h3 style="font-size: 1.1rem; margin-bottom: 10px; color: var(--primary);">Admin Escrow & Commission Control</h3>
+                <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 14px;">Yahan aap saari demo bookings, tutor approvals aur monthly fee escrow track karenge.</p>
+                <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 10px;">
+                    <b>Total Active Tuitions:</b> 1<br>
+                    <b>Escrow Balance Held:</b> ₹0<br>
+                    <b>Platform Commission (9%):</b> ₹0
+                </div>
+                <button class="btn-primary" onclick="alert('Admin Panel Connected Successfully!')">Refresh Live Data</button>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Payment Modal -->
+    <!-- Bottom Navigation Bar -->
+    <nav>
+        <div class="nav-item active" onclick="switchTab('search', this)">
+            <span>🔍</span>Search
+        </div>
+        <div class="nav-item" onclick="switchTab('teacher', this)">
+            <span>👨‍🏫</span>Join Tutor
+        </div>
+        <div class="nav-item" onclick="switchTab('admin', this)">
+            <span>📊</span>Admin
+        </div>
+    </nav>
+
+    <!-- Modal for ₹49 Demo -->
     <div class="modal" id="demoModal">
         <div class="modal-content">
             <div class="modal-title">Book 2-Day Paid Demo (₹49)</div>
-            <div class="modal-text" id="modalDesc">
-                🔒 <b>Secure Token Fee:</b> Yeh ₹49 aapki pehle mahine ki tuition fee mein poori tarah adjust (minus) ho jayega. Agar teacher pasand nahi aaya, toh yeh ₹49 teacher ko travel/time compensation ke roop mein mil jayega.
+            <div class="modal-text">
+                🔒 <b>Secure Token Fee:</b> Yeh ₹49 aapki pehle mahine ki tuition fee mein adjust ho jayega. Agar teacher pasand nahi aaya, toh yeh ₹49 teacher ko time/petrol compensation ke roop mein mil jayega.
             </div>
             <div class="form-group">
                 <label>Parent Name</label>
@@ -191,30 +262,44 @@
     </div>
 
     <script>
+        function switchTab(tabName, element) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            if(tabName === 'search') {
+                document.getElementById('screen-search').classList.add('active');
+                document.getElementById('header-title').innerText = "GuruJi Home Tuitions";
+                document.getElementById('header-subtitle').innerText = "Verified Home Tutors • Zero Agency Commission";
+            } else if(tabName === 'teacher') {
+                document.getElementById('screen-teacher').classList.add('active');
+                document.getElementById('header-title').innerText = "Tutor Registration";
+                document.getElementById('header-subtitle').innerText = "Join Our Network & Get Direct Leads";
+            } else if(tabName === 'admin') {
+                document.getElementById('screen-admin').classList.add('active');
+                document.getElementById('header-title').innerText = "Admin Control Room";
+                document.getElementById('header-subtitle').innerText = "Escrow & Payout Management";
+            }
+            element.classList.add('active');
+        }
+
         let selectedTutorName = "";
-
-        function searchTutors() {
-            alert("Searching verified tutors in your selected area...");
-        }
-
-        function openModal(tutorName) {
-            selectedTutorName = tutorName;
-            document.getElementById('demoModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('demoModal').style.display = 'none';
-        }
-
+        function searchTutors() { alert("Searching verified tutors in your selected area..."); }
+        function openModal(tName) { selectedTutorName = tName; document.getElementById('demoModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('demoModal').style.display = 'none'; }
+        
         function payToken() {
             let name = document.getElementById('parentName').value;
             let phone = document.getElementById('parentPhone').value;
-            if(!name || !phone) {
-                alert("Please enter your name and phone number.");
-                return;
-            }
-            alert(`Demo request submitted successfully for ${selectedTutorName}!\nRedirecting to secure payment gateway for ₹49...`);
+            if(!name || !phone) { alert("Please enter name and phone number."); return; }
+            alert(`Demo request submitted for ${selectedTutorName}!\nRedirecting to secure gateway for ₹49...`);
             closeModal();
+        }
+
+        function registerTeacher() {
+            let name = document.getElementById('tName').value;
+            if(!name) { alert("Please fill your name."); return; }
+            alert("Teacher profile submitted successfully! Admin will verify and list it soon.");
+            switchTab('search', document.querySelectorAll('.nav-item')[0]);
         }
     </script>
 </body>
